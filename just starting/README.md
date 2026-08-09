@@ -37,4 +37,5 @@ Each journal entry is created using:
 ```java
 new Entry(...)
 
+
 🌸 Keep coding, keep growing. 🌱
