@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ffd6ec, #e8d5ff);
+        }
+
+        .calculator {
+            width: 330px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff66b3;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        #display {
+            width: 100%;
+            height: 70px;
+            border: none;
+            border-radius: 20px;
+            background: #fff0f7;
+            color: #8f4770;
+            text-align: right;
+            padding: 15px;
+            font-size: 30px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            height: 60px;
+            border: none;
+            border-radius: 18px;
+            background: #ffd1e6;
+            color: #8f4770;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: #ffb3d9;
+        }
+
+        .operator {
+            background: #ff99cc;
+            color: white;
+        }
+
+        .equal {
+            background: #ff66b3;
+            color: white;
+        }
+
+        .clear {
+            background: #d9b3ff;
+            color: white;
+        }
+
+        .zero {
+            grid-column: span 2;
+        }
+
+        .footer {
+            text-align: center;
+            color: #b36b91;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+
+        <h1>Calculator</h1>
+
+        <input
+            type="text"
+            id="display"
+            value="0"
+            readonly
+        >
+
+        <div class="buttons">
+
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="deleteNumber()">⌫</button>
+            <button class="operator" onclick="addOperator('%')">%</button>
+            <button class="operator" onclick="addOperator('/')">÷</button>
+
+            <button onclick="addNumber('7')">7</button>
+            <button onclick="addNumber('8')">8</button>
+            <button onclick="addNumber('9')">9</button>
+            <button class="operator" onclick="addOperator('*')">×</button>
+
+            <button onclick="addNumber('4')">4</button>
+            <button onclick="addNumber('5')">5</button>
+            <button onclick="addNumber('6')">6</button>
+            <button class="operator" onclick="addOperator('-')">−</button>
+
+            <button onclick="addNumber('1')">1</button>
+            <button onclick="addNumber('2')">2</button>
+            <button onclick="addNumber('3')">3</button>
+            <button class="operator" onclick="addOperator('+')">+</button>
+
+            <button class="zero" onclick="addNumber('0')">0</button>
+            <button onclick="addNumber('.')">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+
+        </div>
+
+        <div class="footer">
+            ✨ Made with HTML, CSS & JavaScript ✨</div>
+<div class="footer"> created by Hazel</div>
+
+    <script>
+
+        let display =
+            document.getElementById("display");
+
+
+        // Add numbers
+        function addNumber(number) {
+
+            if (display.value === "0") {
+                display.value = number;
+            } else {
+                display.value += number;
+            }
+        }
+
+
+        // Add operators
+        function addOperator(operator) {
+
+            let last =
+                display.value.slice(-1);
+
+            if (
+                last === "+" ||
+                last === "-" ||
+                last === "*" ||
+                last === "/" ||
+                last === "%"
+            ) {
+                return;
+            }
+
+            display.value += operator;
+        }
+
+
+        // Clear calculator
+        function clearDisplay() {
+
+            display.value = "0";
+        }
+
+
+        // Delete one number
+        function deleteNumber() {
+
+            if (display.value.length === 1) {
+
+                display.value = "0";
+
+            } else {
+
+                display.value =
+                    display.value.slice(0, -1);
+            }
+        }
+
+
+        // Calculate result
+        function calculate() {
+
+            try {
+
+                let expression =
+                    display.value;
+
+                let result =
+                    Function(
+                        '"use strict"; return (' +
+                        expression +
+                        ')'
+                    )();
+
+                display.value = result;
+
+            } catch (error) {
+
+                display.value = "Error";
+
+                setTimeout(function() {
+                    display.value = "0";
+                }, 1500);
+            }
+        }
+
+    </script>
+
+</body>
+  </html>
