@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Growing Tulip</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    #101522,
+                    #28354a 55%,
+                    #172619
+                );
+
+            font-family: Georgia, serif;
+        }
+
+        /* Moon */
+
+        .moon {
+            position: absolute;
+            top: 10%;
+            right: 5%;
+
+            width: 80px;
+            height: 80px;
+
+            border-radius: 50%;
+
+            background: #f5eee1;
+
+            box-shadow:
+                0 0 30px rgba(255,255,255,0.35);
+        }
+
+        /* Stars */
+
+        .stars {
+            position: absolute;
+            inset: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+
+            background: white;
+            border-radius: 50%;
+
+            animation: twinkle 2s infinite alternate;
+        }
+
+        .star:nth-child(1) {
+            top: 15%;
+            left: 20%;
+        }
+
+        .star:nth-child(2) {
+            top: 25%;
+            left: 70%;
+        }
+
+        .star:nth-child(3) {
+            top: 35%;
+            left: 35%;
+        }
+
+        .star:nth-child(4) {
+            top: 18%;
+            left: 55%;
+        }
+
+        .star:nth-child(5) {
+            top: 40%;
+            left: 82%;
+        }
+
+        @keyframes twinkle {
+            from {
+                opacity: 0.2;
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1.8);
+            }
+        }
+
+        /* Title */
+
+        .title {
+            position: absolute;
+            top: 7%;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            color: #f5eee1;
+            text-align: center;
+
+            letter-spacing: 4px;
+            font-size: 20px;
+
+            opacity: 0;
+
+            animation:
+                fadeIn 3s ease forwards;
+        }
+
+        .title span {
+            display: block;
+
+            margin-top: 8px;
+
+            font-size: 11px;
+            letter-spacing: 3px;
+
+            color: #aaa;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Ground */
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+
+            width: 100%;
+            height: 20%;
+
+            background:
+                radial-gradient(
+                    ellipse at center,
+                    #263c23,
+                    #101810
+                );
+        }
+
+        /* Plant */
+
+        .plant {
+            position: absolute;
+            bottom: 17%;
+
+            width: 180px;
+            height: 430px;
+        }
+
+        /* Stem */
+
+        .stem {
+            position: absolute;
+
+            bottom: 0;
+            left: 50%;
+
+            width: 9px;
+            height: 0;
+
+            transform: translateX(-50%);
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    to right,
+                    #163c22,
+                    #4e8a4e,
+                    #163c22
+                );
+
+            animation:
+                growStem 5s ease-in-out forwards;
+        }
+
+        @keyframes growStem {
+
+            0% {
+                height: 0;
+            }
+
+            100% {
+                height: 280px;
+            }
+
+        }
+
+        /* Leaves */
+
+        .leaf {
+            position: absolute;
+
+            width: 90px;
+            height: 35px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1b4827,
+                    #60945b
+                );
+
+            opacity: 0;
+
+            transform-origin: bottom center;
+
+            border-radius:
+                100% 0 100% 0;
+        }
+
+        .leaf.left {
+            left: 42px;
+            bottom: 80px;
+
+            transform: rotate(-35deg) scale(0);
+
+            animation:
+                leafGrow 2s ease forwards 3.2s;
+        }
+
+        .leaf.right {
+            right: 35px;
+            bottom: 135px;
+
+            transform:
+                rotate(140deg) scale(0);
+
+            animation:
+                leafGrow 2s ease forwards 3.7s;
+        }
+
+        @keyframes leafGrow {
+
+            0% {
+                opacity: 0;
+                transform:
+                    rotate(-35deg)
+                    scale(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform:
+                    rotate(-35deg)
+                    scale(1);
+            }
+
+        }
+
+        .leaf.right {
+            animation-name: leafRight;
+        }
+
+        @keyframes leafRight {
+
+            0% {
+                opacity: 0;
+                transform:
+                    rotate(140deg)
+                    scale(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform:
+                    rotate(140deg)
+                    scale(1);
+            }
+
+        }
+
+        /* Tulip */
+
+        .tulip {
+            position: absolute;
+
+            left: 50%;
+            bottom: 255px;
+
+            width: 100px;
+            height: 115px;
+
+            transform:
+                translateX(-50%)
+                scale(0);
+
+            transform-origin: bottom center;
+
+            animation:
+                tulipGrow 3s
+                cubic-bezier(.17,.67,.35,1.25)
+                forwards 4.5s;
+        }
+
+        @keyframes tulipGrow {
+
+            0% {
+                transform:
+                    translateX(-50%)
+                    scale(0);
+            }
+
+            60% {
+                transform:
+                    translateX(-50%)
+                    scale(1.12);
+            }
+
+            100% {
+                transform:
+                    translateX(-50%)
+                    scale(1);
+            }
+
+        }
+
+        /* Tulip petals */
+
+        .petal {
+            position: absolute;
+
+            bottom: 0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #720d1c,
+                    #c51632 55%,
+                    #ef4960
+                );
+
+            box-shadow:
+                inset -8px -5px 15px
+                rgba(70,0,10,0.25);
+
+            border-radius:
+                55% 55% 35% 35%;
+        }
+
+        .petal.left {
+            left: 3px;
+
+            width: 55px;
+            height: 95px;
+
+            transform:
+                rotate(-25deg);
+        }
+
+        .petal.center {
+            left: 25px;
+
+            width: 55px;
+            height: 108px;
+
+            z-index: 2;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #a30c22,
+                    #e51c3a
+                );
+        }
+
+        .petal.right {
+            right: 3px;
+
+            width: 55px;
+            height: 95px;
+
+            transform:
+                rotate(25deg);
+        }
+
+        /* Petal highlights */
+
+        .petal::after {
+            content: "";
+
+            position: absolute;
+
+            top: 12px;
+            left: 15px;
+
+            width: 10px;
+            height: 55px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,180,190,0.18);
+
+            filter: blur(3px);
+        }
+
+        /* Floating particles */
+
+        .particle {
+            position: absolute;
+
+            width: 4px;
+            height: 4px;
+
+            border-radius: 50%;
+
+            background: #d8c8aa;
+
+            opacity: 0;
+
+            animation:
+                float 6s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) {
+            left: 25%;
+            bottom: 25%;
+            animation-delay: 1s;
+        }
+
+        .particle:nth-child(2) {
+            left: 65%;
+            bottom: 30%;
+            animation-delay: 3s;
+        }
+
+        .particle:nth-child(3) {
+            left: 45%;
+            bottom: 20%;
+            animation-delay: 5s;
+        }
+
+        @keyframes float {
+
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            30% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 0;
+                transform:
+                    translateY(-120px)
+                    translateX(20px);
+            }
+
+        }
+
+        /* Restart button */
+
+        .restart {
+            position: absolute;
+
+            bottom: 30px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            padding: 10px 22px;
+
+            border: 1px solid #777;
+            border-radius: 25px;
+
+            background: rgba(0,0,0,0.3);
+
+            color: #ddd;
+
+            cursor: pointer;
+
+            font-family: Georgia, serif;
+
+            transition: 0.3s;
+        }
+
+        .restart:hover {
+            background: #fff;
+            color: #111;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <div class="moon"></div>
+
+    <div class="title">
+        A LITTLE MOMENT
+        <span>WATCH IT BLOOM</span>
+    </div>
+
+    <div class="ground"></div>
+
+    <div class="plant">
+
+        <div class="stem"></div>
+
+        <div class="leaf left"></div>
+
+        <div class="leaf right"></div>
+
+        <div class="tulip">
+
+            <div class="petal left"></div>
+
+            <div class="petal center"></div>
+
+            <div class="petal right"></div>
+
+        </div>
+
+    </div>
+
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <button
+        class="restart"
+        onclick="restart()">
+        Grow Again
+    </button>
+
+
+    <script>
+
+        function restart() {
+
+            const plant =
+                document.querySelector(".plant");
+
+            const stem =
+                document.querySelector(".stem");
+
+            const leaves =
+                document.querySelectorAll(".leaf");
+
+            const tulip =
+                document.querySelector(".tulip");
+
+            /* Reset animations */
+
+            stem.style.animation = "none";
+            tulip.style.animation = "none";
+
+            leaves.forEach(function(leaf) {
+                leaf.style.animation = "none";
+            });
+
+            /* Force browser reflow */
+
+            void plant.offsetWidth;
+
+            /* Start again */
+
+            stem.style.animation =
+                "growStem 5s ease-in-out forwards";
+
+            leaves[0].style.animation =
+                "leafGrow 2s ease forwards 3.2s";
+
+            leaves[1].style.animation =
+                "leafRight 2s ease forwards 3.7s";
+
+            tulip.style.animation =
+                "tulipGrow 3s cubic-bezier(.17,.67,.35,1.25) forwards 4.5s";
+        }
+
+    </script>
+
+</body>
+  </html>
