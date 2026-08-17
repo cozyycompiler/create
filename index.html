@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Diary</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Georgia, serif;
+            background: #f4f1ec;
+            color: #333;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        header h1 {
+            font-size: 45px;
+            margin: 0;
+            letter-spacing: 3px;
+        }
+
+        header p {
+            color: #bbb;
+            margin-top: 15px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .write-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px #00000015;
+            margin-bottom: 40px;
+        }
+
+        .write-box h2 {
+            margin-top: 0;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+
+            border: 1px solid #ccc;
+            border-radius: 6px;
+
+            font-family: Georgia, serif;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        .diary-entry {
+            background: white;
+            padding: 30px;
+            margin-bottom: 25px;
+
+            border-left: 5px solid #222;
+            box-shadow: 0 4px 15px #00000012;
+        }
+
+        .diary-entry h2 {
+            margin-top: 0;
+        }
+
+        .date {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .thought {
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .delete {
+            background: #888;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+
+            header h1 {
+                font-size: 32px;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+
+            .diary-entry {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>My Diary</h1>
+
+        <p>
+            Thoughts, memories, and little pieces of my life.
+        </p>
+
+    </header>
+
+
+    <div class="container">
+
+        <!-- Write Diary -->
+
+        <div class="write-box">
+
+            <h2>Write a New Thought</h2>
+
+            <input
+                type="text"
+                id="title"
+                placeholder="Title"
+            >
+
+            <textarea
+                id="thought"
+                placeholder="Write your thoughts here..."
+            ></textarea>
+
+            <button onclick="addEntry()">
+                Publish Thought
+            </button>
+
+        </div>
+
+
+        <!-- Diary Entries -->
+
+        <div id="entries"></div>
+
+    </div>
+
+
+    <footer>
+
+        created by Hazel
+
+    </footer>
+
+
+    <script>
+
+        let entries =
+            JSON.parse(
+                localStorage.getItem("diaryEntries")
+            ) || [];
+
+
+        function displayEntries() {
+
+            const container =
+                document.getElementById("entries");
+
+            container.innerHTML = "";
+
+
+            if (entries.length === 0) {
+
+                container.innerHTML = `
+                    <div class="diary-entry">
+                        <h2>No thoughts yet</h2>
+                        <p class="thought">
+                            Start writing your first diary entry.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            entries.forEach(function(entry, index) {
+
+                const article =
+                    document.createElement("article");
+
+                article.className =
+                    "diary-entry";
+
+
+                article.innerHTML = `
+
+                    <h2>
+                        ${escapeHTML(entry.title)}
+                    </h2>
+
+                    <div class="date">
+                        ${entry.date}
+                    </div>
+
+                    <div class="thought">
+                        ${escapeHTML(entry.thought)}
+                    </div>
+
+                    <button
+                        class="delete"
+                        onclick="deleteEntry(${index})">
+                        Delete
+                    </button>
+
+                `;
+
+                container.appendChild(article);
+
+            });
+
+        }
+
+
+        function addEntry() {
+
+            const title =
+                document.getElementById("title").value.trim();
+
+            const thought =
+                document.getElementById("thought").value.trim();
+
+
+            if (title === "" || thought === "") {
+
+                alert(
+                    "Please enter both a title and your thoughts."
+                );
+
+                return;
+            }
+
+
+            const entry = {
+
+                title: title,
+
+                thought: thought,
+
+                date: new Date().toLocaleString()
+
+            };
+
+
+            entries.unshift(entry);
+
+
+            localStorage.setItem(
+                "diaryEntries",
+                JSON.stringify(entries)
+            );
+
+
+            document.getElementById("title").value = "";
+
+            document.getElementById("thought").value = "";
+
+
+            displayEntries();
+
+        }
+
+
+        function deleteEntry(index) {
+
+            if (
+                confirm(
+                    "Delete this diary entry?"
+                )
+            ) {
+
+                entries.splice(index, 1);
+
+                localStorage.setItem(
+                    "diaryEntries",
+                    JSON.stringify(entries)
+                );
+
+                displayEntries();
+
+            }
+
+        }
+
+
+        /*
+         * Prevent HTML entered into the diary
+         * from being interpreted as webpage code.
+         */
+
+        function escapeHTML(text) {
+
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        displayEntries();
+
+    </script>
+
+</body>
+  </html>
